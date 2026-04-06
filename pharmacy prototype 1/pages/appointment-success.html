@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Appointment Confirmed</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#eef5ff;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.card{
+background:white;
+padding:40px;
+border-radius:12px;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+text-align:center;
+width:360px;
+}
+
+h1{
+color:#1976d2;
+}
+
+.detail{
+margin:10px 0;
+font-size:16px;
+}
+
+button{
+margin-top:20px;
+padding:12px 20px;
+border:none;
+background:#1976d2;
+color:white;
+border-radius:6px;
+cursor:pointer;
+font-weight:bold;
+}
+
+button:hover{
+background:#0d5cb6;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>Appointment Confirmed ✅</h1>
+
+<p class="detail"><b>Patient:</b> <span id="pname"></span></p>
+
+<p class="detail"><b>Doctor:</b> <span id="pdoctor"></span></p>
+
+<p class="detail"><b>Hospital:</b> <span id="phospital"></span></p>
+
+<p class="detail"><b>Date:</b> <span id="pdate"></span></p>
+
+<p class="detail"><b>Time:</b> <span id="ptime"></span></p>
+
+<p class="detail"><b>Appointment ID:</b> #MDN48291</p>
+
+<button onclick="window.location='dashboard.html'">Back to Home</button>
+
+</div>
+
+<script>
+
+document.getElementById("pname").innerText=localStorage.getItem("patientName");
+document.getElementById("pdoctor").innerText=localStorage.getItem("doctor");
+document.getElementById("phospital").innerText=localStorage.getItem("hospital");
+document.getElementById("pdate").innerText=localStorage.getItem("date");
+document.getElementById("ptime").innerText=localStorage.getItem("time");
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MediNova Pharmacy</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+
+/* BODY */
+
+body{
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+
+background-image:url("pages/images/med5.jpg"); /* initial image */
+
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
+background-attachment:fixed;
+
+transition:background-image 1s ease-in-out;
+}
+
+/* DARK OVERLAY */
+
+body::before{
+content:"";
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.45);
+z-index:-1;
+}
+
+/* LOGIN WRAPPER */
+
+.login-wrapper{
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+/* LOGIN CARD */
+
+.login-card{
+width:320px;
+background:white;
+padding:35px;
+border-radius:12px;
+text-align:center;
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
+position:relative;
+z-index:1;
+}
+
+/* LOGO */
+
+.logo{
+margin:0;
+font-size:30px;
+color:#1976d2;
+}
+
+/* SUBTITLE */
+
+.subtitle{
+color:#666;
+font-size:14px;
+margin-bottom:20px;
+height:18px;
+}
+
+/* INPUT */
+
+.login-card input{
+width:100%;
+padding:10px;
+margin:10px 0;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+/* BUTTON */
+
+.login-card button{
+width:100%;
+padding:10px;
+background:#1976d2;
+border:none;
+color:white;
+border-radius:6px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.login-card button:hover{
+background:#0d5cb6;
+}
+
+/* DEMO TEXT */
+
+.demo{
+font-size:12px;
+margin-top:12px;
+color:#777;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="login-wrapper">
+
+<div class="login-card">
+
+<h1 class="logo">MediNova</h1>
+
+<p id="subtitle" class="subtitle"></p>
+
+<input id="user" placeholder="Username">
+
+<input id="pass" type="password" placeholder="Password">
+
+<button onclick="login()">Login</button>
+
+<p class="demo">Demo login: balagopal / pharma123</p>
+
+</div>
+
+</div>
+
+<script>
+
+/* BACKGROUND SLIDESHOW */
+
+const backgrounds = [
+"images/login1.jpg",
+"images/med3.jpg",
+"images/med9.jpg",
+"images/login.jpg"
+];
+
+let bgIndex = 0;
+
+function changeBackground(){
+
+document.body.style.backgroundImage =
+`url(${backgrounds[bgIndex]})`;
+
+bgIndex = (bgIndex + 1) % backgrounds.length;
+
+}
+
+setInterval(changeBackground,4000);
+
+/* TYPING EFFECT */
+
+const text="Login to access your smart pharmacy";
+let i=0;
+
+function type(){
+
+if(i < text.length){
+document.getElementById("subtitle").innerHTML += text.charAt(i);
+i++;
+setTimeout(type,35);
+}
+
+}
+
+type();
+
+/* LOGIN */
+
+function login(){
+
+let u=document.getElementById("user").value;
+let p=document.getElementById("pass").value;
+
+if(u==="balagopal" && p==="pharma123"){
+
+window.location="dashboard.html";
+
+}
+else{
+
+alert("Invalid login");
+
+}
+
+}
+
+</script>
+
+</body>
+</html>

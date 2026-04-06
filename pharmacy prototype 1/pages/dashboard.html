@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MediNova Dashboard</title>
+
+<style>
+
+/* GENERAL */
+
+body{
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+background:#f5f9ff;
+}
+
+/* NAVBAR */
+
+.nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:#1976d2;
+padding:15px 40px;
+color:white;
+}
+
+.logo{
+font-size:22px;
+font-weight:bold;
+}
+
+.nav-links a{
+color:white;
+text-decoration:none;
+margin-left:20px;
+font-weight:bold;
+}
+
+/* HERO */
+
+.hero{
+text-align:center;
+padding:120px 20px;
+color:white;
+background-size:cover;
+background-position:center;
+transition:background-image 1s ease-in-out;
+background-blend-mode:overlay;
+background-color:rgba(0,0,0,0.35);
+}
+
+.hero h1{
+font-size:40px;
+margin-bottom:10px;
+}
+
+.hero p{
+font-size:18px;
+min-height:24px;
+}
+
+/* FEATURES */
+
+.features{
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
+gap:25px;
+padding:50px;
+}
+
+.feature-card{
+width:170px;
+background:white;
+border-radius:14px;
+box-shadow:0 6px 20px rgba(0,0,0,0.1);
+text-decoration:none;
+color:#333;
+overflow:hidden;
+transition:0.3s;
+text-align:center;
+}
+
+.feature-card img{
+width:100%;
+height:110px;
+object-fit:cover;
+}
+
+.feature-card span{
+display:block;
+padding:12px;
+font-weight:bold;
+}
+
+.feature-card:hover{
+transform:translateY(-8px);
+box-shadow:0 12px 30px rgba(0,0,0,0.2);
+}
+
+/* CHAT BUTTON */
+
+.chat-btn{
+position:fixed;
+bottom:25px;
+right:25px;
+background:#1976d2;
+color:white;
+width:55px;
+height:55px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:24px;
+cursor:pointer;
+box-shadow:0 5px 20px rgba(0,0,0,0.3);
+}
+
+/* CHAT BOX */
+
+.chat-box{
+position:fixed;
+bottom:90px;
+right:25px;
+width:280px;
+background:white;
+border-radius:10px;
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
+display:none;
+overflow:hidden;
+}
+
+.chat-header{
+background:#1976d2;
+color:white;
+padding:10px;
+font-weight:bold;
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.chat-body{
+padding:15px;
+}
+
+.chat-body input{
+width:100%;
+padding:8px;
+margin-top:8px;
+margin-bottom:8px;
+border-radius:5px;
+border:1px solid #ccc;
+}
+
+.chat-body button{
+width:100%;
+padding:8px;
+border:none;
+background:#1976d2;
+color:white;
+border-radius:5px;
+cursor:pointer;
+}
+
+.chat-body button:hover{
+background:#0d5cb6;
+}
+
+.ai-avatar{
+width:28px;
+height:28px;
+border-radius:50%;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<nav class="nav">
+
+<div class="logo">MediNova</div>
+
+<div class="nav-links">
+<a href="dashboard.html">Home</a>
+<a href="store.html">Products</a>
+</div>
+
+</nav>
+
+<!-- HERO -->
+
+<section class="hero">
+
+<h1 id="heroTitle"></h1>
+<p id="heroTagline"></p>
+
+</section>
+
+<!-- FEATURE CARDS -->
+
+<section class="features">
+
+<a href="store.html" class="feature-card">
+<img src="images/med1.jpg">
+<span>Medicines</span>
+</a>
+
+<a href="prescription.html" class="feature-card">
+<img src="images/prescrition.jpg">
+<span>Prescription</span>
+</a>
+
+<a href="lab_tests.html" class="feature-card">
+<img src="images/med7.jpg">
+<span>Lab Tests</span>
+</a>
+
+<a href="nutrition.html" class="feature-card">
+<img src="images/nutrtion.jpg">
+<span>Nutrition</span>
+</a>
+
+<a href="appointments.html" class="feature-card">
+<img src="images/med8.jpg">
+<span>Appointments</span>
+</a>
+
+</section>
+
+<!-- CHAT BUTTON -->
+
+<div class="chat-btn" onclick="toggleChat()">💬</div>
+
+<!-- CHAT BOX -->
+
+<div class="chat-box" id="chatBox">
+
+<div class="chat-header">
+<img src="images/med2.jpg" class="ai-avatar">
+AI Health Assistant
+</div>
+
+<div class="chat-body">
+
+<p>Hello 👋 Tell me your symptoms.</p>
+
+<input id="symptom" placeholder="Example: fever, cough">
+
+<button onclick="check()">Analyze</button>
+
+<p id="result"></p>
+
+</div>
+
+</div>
+
+<script>
+
+/* HERO SLIDES */
+
+const slides = [
+
+{
+image:"images/med5.jpg",
+title:"Welcome to MediNova",
+tagline:"Your Smart Online Pharmacy"
+},
+
+{
+image:"images/med6.jpg",
+title:"Order Medicines Easily",
+tagline:"Trusted medicines delivered quickly"
+},
+
+{
+image:"images/med7.jpg",
+title:"Doctor Consultation",
+tagline:"Book doctors and manage appointments"
+},
+
+{
+image:"images/med8.jpg",
+title:"Healthy Living",
+tagline:"Nutrition guidance and health tracking"
+}
+
+];
+
+let index=0;
+let charIndex=0;
+let typingInterval;
+
+/* TYPING ANIMATION */
+
+function typeText(text){
+
+clearInterval(typingInterval);
+
+const tag=document.getElementById("heroTagline");
+
+tag.innerHTML="";
+charIndex=0;
+
+typingInterval=setInterval(()=>{
+
+if(charIndex < text.length){
+
+tag.innerHTML += text.charAt(charIndex);
+charIndex++;
+
+}
+
+else{
+
+clearInterval(typingInterval);
+
+}
+
+},40);
+
+}
+
+/* CHANGE SLIDE */
+
+function changeSlide(){
+
+const hero=document.querySelector(".hero");
+const title=document.getElementById("heroTitle");
+
+hero.style.backgroundImage=`url(${slides[index].image})`;
+title.innerText=slides[index].title;
+
+typeText(slides[index].tagline);
+
+index=(index+1)%slides.length;
+
+}
+
+changeSlide();
+setInterval(changeSlide,5000);
+
+/* CHAT */
+
+function toggleChat(){
+
+let box=document.getElementById("chatBox");
+
+if(box.style.display==="block"){
+box.style.display="none";
+}else{
+box.style.display="block";
+}
+
+}
+
+/* AI SYMPTOM CHECK */
+
+function check(){
+
+let s=document.getElementById("symptom").value.toLowerCase();
+let r="";
+
+if(s.includes("fever")){
+r="Possible fever detected. Stay hydrated and take rest.";
+}
+
+else if(s.includes("cough") || s.includes("cold")){
+r="Common cold symptoms detected. Warm fluids and rest may help.";
+}
+
+else if(s.includes("headache")){
+r="Headache detected. Hydration and proper sleep recommended.";
+}
+
+else if(s.includes("stomach")){
+r="Stomach discomfort detected. Light food and hydration recommended.";
+}
+
+else{
+r="Try symptoms like fever, cough, headache or stomach pain.";
+}
+
+document.getElementById("result").innerText=r;
+
+}
+
+</script>
+
+</body>
+
+</html>

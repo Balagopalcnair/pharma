@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doctor Appointment</title>
+
+<style>
+
+/* BODY */
+
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background:linear-gradient(135deg,#2E86DE,#48C9B0);
+min-height:100vh;
+}
+
+/* NAVBAR */
+
+.nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 30px;
+background:rgba(255,255,255,0.1);
+backdrop-filter:blur(8px);
+color:white;
+}
+
+.nav a{
+color:white;
+text-decoration:none;
+margin-left:20px;
+font-weight:bold;
+}
+
+/* HERO */
+
+.hero{
+text-align:center;
+color:white;
+padding:40px 20px;
+}
+
+.hero h1{
+margin-bottom:5px;
+}
+
+/* FORM CARD */
+
+.form-card{
+width:460px;
+margin:auto;
+background:white;
+padding:30px;
+border-radius:14px;
+box-shadow:0 15px 35px rgba(0,0,0,0.25);
+}
+
+/* LABELS */
+
+.form-card label{
+font-weight:bold;
+display:block;
+margin-top:12px;
+}
+
+/* INPUTS */
+
+.form-card input,
+.form-card select{
+width:100%;
+padding:10px;
+margin-top:6px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+/* DOCTOR GRID */
+
+.doctor-list{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+margin-top:12px;
+}
+
+/* DOCTOR CARD */
+
+.doctor-card{
+background:#f5f7fa;
+border-radius:10px;
+padding:12px;
+text-align:center;
+transition:0.3s;
+border:2px solid transparent;
+}
+
+.doctor-card img{
+width:60px;
+height:60px;
+border-radius:50%;
+object-fit:cover;
+margin-bottom:6px;
+}
+
+.doctor-card h4{
+margin:4px 0;
+font-size:14px;
+}
+
+.doctor-card p{
+margin:2px 0;
+font-size:12px;
+color:#555;
+}
+
+.doctor-card button{
+margin-top:6px;
+background:#2E86DE;
+border:none;
+color:white;
+padding:5px 10px;
+border-radius:5px;
+cursor:pointer;
+font-size:12px;
+}
+
+/* HOVER */
+
+.doctor-card:hover{
+transform:translateY(-4px);
+box-shadow:0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* SELECTED DOCTOR */
+
+.doctor-card.selected{
+border:2px solid #2E86DE;
+background:#eaf2ff;
+}
+
+/* BOOK BUTTON */
+
+.main-btn{
+width:100%;
+margin-top:15px;
+padding:12px;
+border:none;
+background:#2E86DE;
+color:white;
+border-radius:6px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.main-btn:hover{
+background:#1f6fd1;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<nav class="nav">
+<div><b>MediNova</b></div>
+
+<div>
+<a href="dashboard.html">Home</a>
+<a href="store.html">Products</a>
+</div>
+</nav>
+
+<section class="hero">
+<h1>Book Doctor Appointment</h1>
+<p>Select hospital and doctor for consultation</p>
+</section>
+
+<div class="form-card">
+
+<form onsubmit="bookAppointment(event)">
+
+<label>Patient Name</label> <input id="name" type="text" required>
+
+<label>Email Address</label> <input id="email" type="email" required>
+
+<label>Select Hospital</label>
+
+<select id="hospital" onchange="updateDoctors()" required>
+<option value="">Choose Hospital</option>
+<option value="city">MediNova City Hospital</option>
+<option value="care">CarePlus Medical Center</option>
+<option value="bridge">HealthBridge Clinic</option>
+</select>
+
+<label>Select Doctor</label>
+
+<div id="doctor-list" class="doctor-list"></div>
+
+<input type="hidden" id="doctor">
+
+<label>Appointment Date</label> <input id="date" type="date" required>
+
+<label>Appointment Time</label> <input id="time" type="time" required>
+
+<button class="main-btn" type="submit">Book Appointment</button>
+
+</form>
+
+</div>
+
+<script>
+
+const doctors={
+
+city:[
+{
+name:"Dr. Anil Kumar",
+specialty:"General Physician",
+exp:"12 yrs experience",
+rating:"⭐4.7",
+img:"https://randomuser.me/api/portraits/men/45.jpg"
+},
+{
+name:"Dr. Neha Sharma",
+specialty:"Cardiologist",
+exp:"9 yrs experience",
+rating:"⭐4.6",
+img:"https://randomuser.me/api/portraits/women/65.jpg"
+}
+],
+
+care:[
+{
+name:"Dr. Rahul Menon",
+specialty:"Dermatologist",
+exp:"10 yrs experience",
+rating:"⭐4.8",
+img:"https://randomuser.me/api/portraits/men/32.jpg"
+},
+{
+name:"Dr. Meera Nair",
+specialty:"Nutritionist",
+exp:"8 yrs experience",
+rating:"⭐4.5",
+img:"https://randomuser.me/api/portraits/women/52.jpg"
+}
+],
+
+bridge:[
+{
+name:"Dr. Arjun Das",
+specialty:"Orthopedic",
+exp:"11 yrs experience",
+rating:"⭐4.6",
+img:"https://randomuser.me/api/portraits/men/66.jpg"
+},
+{
+name:"Dr. Kavya Pillai",
+specialty:"Pediatrician",
+exp:"7 yrs experience",
+rating:"⭐4.7",
+img:"https://randomuser.me/api/portraits/women/40.jpg"
+}
+]
+
+};
+
+function updateDoctors(){
+
+let hospital=document.getElementById("hospital").value;
+let container=document.getElementById("doctor-list");
+
+container.innerHTML="";
+
+if(doctors[hospital]){
+
+doctors[hospital].forEach(function(doc){
+
+let card=document.createElement("div");
+card.className="doctor-card";
+
+card.innerHTML=`
+
+<img src="${doc.img}">
+<h4>${doc.name}</h4>
+<p>${doc.specialty}</p>
+<p>${doc.exp}</p>
+<p>${doc.rating}</p>
+<button type="button" onclick="selectDoctor('${doc.name}',this)">Select</button>
+
+`;
+
+container.appendChild(card);
+
+});
+
+}
+
+}
+
+function selectDoctor(name,btn){
+
+document.getElementById("doctor").value=name;
+
+document.querySelectorAll(".doctor-card").forEach(card=>{
+card.classList.remove("selected");
+});
+
+btn.parentElement.classList.add("selected");
+
+}
+
+function bookAppointment(e){
+
+e.preventDefault();
+
+localStorage.setItem("patientName",document.getElementById("name").value);
+localStorage.setItem("doctor",document.getElementById("doctor").value);
+
+localStorage.setItem("hospital",
+document.getElementById("hospital").options[
+document.getElementById("hospital").selectedIndex].text);
+
+localStorage.setItem("date",document.getElementById("date").value);
+localStorage.setItem("time",document.getElementById("time").value);
+
+window.location="appointment-success.html";
+
+}
+
+</script>
+
+</body>
+</html>
